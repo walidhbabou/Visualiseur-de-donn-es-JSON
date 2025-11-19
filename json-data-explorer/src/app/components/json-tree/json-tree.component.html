@@ -1,0 +1,51 @@
+<div class="tree-container">
+  <div class="tree-header">
+    <h2>Tree View</h2>
+    <p class="subtitle">Explore your JSON data in a hierarchical structure</p>
+  </div>
+
+  <div class="tree-wrapper">
+    @if (rootNode()) {
+      <div class="tree-root">
+        <ng-container *ngTemplateOutlet="treeNode; context: { $implicit: rootNode()! }"></ng-container>
+      </div>
+    } @else {
+      <div class="no-data">
+        <p>No data to display</p>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Tree Node Template -->
+<ng-template #treeNode let-node>
+  <div class="tree-node" [style.padding-left.rem]="(node.level || 0) * 1.5">
+    <div class="node-content">
+      <!-- Toggle Icon -->
+      @if (hasChildren(node)) {
+        <span class="toggle-icon" (click)="toggleNode(node)">
+          {{ getIcon(node) }}
+        </span>
+      } @else {
+        <span class="toggle-icon empty">{{ getIcon(node) }}</span>
+      }
+
+      <!-- Key -->
+      <span class="node-key">{{ node.key }}:</span>
+
+      <!-- Value -->
+      <span class="node-value" [ngClass]="getValueClass(node.type)">
+        {{ getDisplayValue(node) }}
+      </span>
+    </div>
+
+    <!-- Children -->
+    @if (hasChildren(node) && node.expanded) {
+      <div class="node-children">
+        @for (child of node.children; track child.key) {
+          <ng-container *ngTemplateOutlet="treeNode; context: { $implicit: child }"></ng-container>
+        }
+      </div>
+    }
+  </div>
+</ng-template>

@@ -1,0 +1,85 @@
+name: CI/CD — Build, Push to ACR, Deploy to AKS
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  IMAGE_NAME: json-explorer
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      - name: Build Angular (production)
+        run: |
+          npm run build -- --configuration production
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Get ACR login server
+        id: acr
+        run: |
+          ACR_NAME=${{ secrets.ACR_NAME }}
+          echo "LOGIN_SERVER=$(az acr show -n $ACR_NAME --query loginServer -o tsv)" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image to ACR
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.acr.outputs.LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Set AKS credentials
+        uses: azure/aks-set-context@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
+          resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
+
+      - name: Deploy to AKS (set image)
+        run: |
+          REGISTRY=${{ steps.acr.outputs.LOGIN_SERVER }}
+          IMAGE=${REGISTRY}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          kubectl get deployment json-explorer-deployment --ignore-not-found
+          if [ $? -eq 0 ]; then
+            kubectl set image deployment/json-explorer-deployment json-explorer=$IMAGE --record
+          else
+            # If deployment doesn't exist yet, apply manifest (ensure manifest uses a placeholder or accepted default)
+            sed -e "s|image: .*|image: $IMAGE|" k8s-deployment.yaml | kubectl apply -f -
+          fi
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/json-explorer-deployment --timeout=120s
+
+      - name: Output service info
+        run: |
+          kubectl get svc json-explorer-service -o wide
+
+
+# Required secrets (set in GitHub repository settings):
+# - AZURE_CREDENTIALS : service principal JSON (for azure/login action)
+# - ACR_NAME : name of your ACR (e.g. jsonexploreracr)
+# - AKS_CLUSTER_NAME : name of your AKS cluster
+# - AKS_RESOURCE_GROUP : resource group containing the AKS cluster
+
+# Notes:
+# - The workflow uses the Azure service principal in AZURE_CREDENTIALS to authenticate and run az/kubectl commands.
+# - It builds the Angular app, builds a Docker image, pushes to ACR and updates the AKS deployment image.
+# - Adjust timeouts, node counts, and manifest paths as needed.

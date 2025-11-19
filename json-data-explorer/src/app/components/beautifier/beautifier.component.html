@@ -1,0 +1,92 @@
+<div class="beautifier-container">
+  <div class="beautifier-header">
+    <h2>JSON Beautifier / Minifier</h2>
+    <p class="subtitle">Format, validate, and minify your JSON data</p>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="button-group">
+      <button class="btn btn-primary" (click)="beautify()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Beautify
+      </button>
+
+      <button class="btn btn-secondary" (click)="minify()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        Minify
+      </button>
+
+      <button class="btn btn-secondary" (click)="validate()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Validate
+      </button>
+
+      <button class="btn btn-secondary" (click)="copyToClipboard()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+        Copy
+      </button>
+
+      <button class="btn btn-danger" (click)="clear()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+        Clear
+      </button>
+    </div>
+
+    <div class="indent-selector">
+      <label>Indent:</label>
+      <div class="radio-group">
+        <label class="radio-label">
+          <input type="radio" name="indent" [value]="2" [checked]="indentSize() === 2" (change)="setIndentSize(2)">
+          <span>2 spaces</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="indent" [value]="4" [checked]="indentSize() === 4" (change)="setIndentSize(4)">
+          <span>4 spaces</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="indent" [value]="8" [checked]="indentSize() === 8" (change)="setIndentSize(8)">
+          <span>8 spaces</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  @if (successMessage()) {
+    <div class="message success">
+      {{ successMessage() }}
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="message error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- Editor -->
+  <div class="editor-wrapper">
+    <textarea
+      class="json-editor"
+      [(ngModel)]="jsonText"
+      placeholder="Paste or type your JSON here..."
+      spellcheck="false">
+    </textarea>
+  </div>
+
+  <div class="editor-info">
+    <span>Characters: {{ jsonText().length }}</span>
+    <span>Lines: {{ jsonText().split('\n').length }}</span>
+  </div>
+</div>

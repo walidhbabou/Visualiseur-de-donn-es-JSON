@@ -1,0 +1,131 @@
+@import 'highlight.js/styles/atom-one-dark.css';
+
+.highlighter-container {
+  padding: 2rem;
+  background: var(--bg-primary);
+  min-height: 100vh;
+}
+
+.highlighter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &.btn-primary {
+    background: var(--primary-color);
+    color: white;
+
+    &:hover {
+      background: var(--primary-color-dark);
+      transform: translateY(-1px);
+    }
+  }
+
+  &.btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+
+    &:hover {
+      background: var(--bg-hover);
+      border-color: var(--primary-color);
+    }
+  }
+}
+
+.message {
+  padding: 0.875rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  &.success {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+  }
+}
+
+.code-wrapper {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  pre {
+    margin: 0;
+    overflow-x: auto;
+
+    code {
+      display: block;
+      padding: 1.5rem;
+      font-family: 'Courier New', Consolas, monospace;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      background: var(--bg-secondary) !important;
+    }
+  }
+}
+
+// Override highlight.js theme for light mode
+:host-context(.light-theme) {
+  .code-wrapper pre code {
+    background: #fafafa !important;
+    color: #383a42;
+    
+    .hljs-attr {
+      color: #e45649;
+    }
+    
+    .hljs-string {
+      color: #50a14f;
+    }
+    
+    .hljs-number {
+      color: #986801;
+    }
+    
+    .hljs-literal {
+      color: #0184bc;
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "age": 30,
+      "isActive": true,
+      "role": "admin",
+      "address": {
+        "street": "123 Main St",
+        "city": "New York",
+        "country": "USA",
+        "zipCode": "10001"
+      },
+      "hobbies": ["reading", "gaming", "traveling"],
+      "createdAt": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "age": 28,
+      "isActive": true,
+      "role": "user",
+      "address": {
+        "street": "456 Oak Ave",
+        "city": "Los Angeles",
+        "country": "USA",
+        "zipCode": "90001"
+      },
+      "hobbies": ["photography", "cooking", "yoga"],
+      "createdAt": "2024-02-20T14:15:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Bob Johnson",
+      "email": "bob.johnson@example.com",
+      "age": 35,
+      "isActive": false,
+      "role": "moderator",
+      "address": {
+        "street": "789 Pine Rd",
+        "city": "Chicago",
+        "country": "USA",
+        "zipCode": "60601"
+      },
+      "hobbies": ["sports", "music", "coding"],
+      "createdAt": "2023-12-05T09:45:00Z"
+    },
+    {
+      "id": 4,
+      "name": "Alice Williams",
+      "email": "alice.williams@example.com",
+      "age": 26,
+      "isActive": true,
+      "role": "user",
+      "address": {
+        "street": "321 Elm St",
+        "city": "Boston",
+        "country": "USA",
+        "zipCode": "02101"
+      },
+      "hobbies": ["painting", "hiking", "reading"],
+      "createdAt": "2024-03-10T11:20:00Z"
+    },
+    {
+      "id": 5,
+      "name": "Charlie Brown",
+      "email": "charlie.brown@example.com",
+      "age": 42,
+      "isActive": true,
+      "role": "admin",
+      "address": {
+        "street": "654 Maple Dr",
+        "city": "Seattle",
+        "country": "USA",
+        "zipCode": "98101"
+      },
+      "hobbies": ["gardening", "fishing", "woodworking"],
+      "createdAt": "2023-11-18T16:00:00Z"
+    }
+  ],
+  "metadata": {
+    "total": 5,
+    "timestamp": "2024-11-18T12:00:00Z",
+    "version": "1.0",
+    "apiEndpoint": "/api/v1/users"
+  }
+}
